@@ -176,7 +176,7 @@ const STAGES_META = [
 const STAGES_LIST = ["Preliminary Assessment", "Project Preparation", "Project Development", "Project Finance", "Financial Close"];
 const ISSUE_CATS = ["Commercial", "Financial Model", "Technical", "Legal", "Deployment", "Governance", "Other"];
 const ISSUE_STATUSES = ["Open", "In Progress", "Escalated", "Resolved"];
-const ROLES = ["Cluster Lead", "Technical Analyst", "Technical Associate", "ESG Associate", "PUE Associate", "Project Finance Analyst", "Project Finance Associate"];
+const ROLES = ["Cluster Lead", "Technical Analyst", "Technical Associate", "ESG Associate", "Legal Associate", "Legal Manager", "PUE Associate", "Project Finance Analyst", "Project Finance Associate"];
 const RAG_C = { Green: "#3a9e5f", Amber: "#d97706", Red: "#dc2626" };
 const RAG_LIGHT = { Green: "#d4edda", Amber: "#fef3cd", Red: "#f8d7da" };
 
