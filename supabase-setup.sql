@@ -37,6 +37,7 @@ create table public.projects (
   "targetClose" text,
   "updateCompliance" integer default 100,
   "evidenceCompliance" integer default 100,
+  jdacost numeric default 0,
   updated_at timestamptz not null default now()
 );
 
@@ -60,9 +61,12 @@ create table public.issues (
 
 create table public.deployment_sites (
   id bigint primary key,
-  site text not null,
+  sitename text not null,
   project text,
-  "householdsInstalled" integer default 0,
+  state text,
+  "LGA" text,
+  connections integer default 0,
+  "PV" numeric default 0,
   updated_at timestamptz not null default now()
 );
 
@@ -140,10 +144,10 @@ insert into public.issues (id, project, owner, status, due) values
   (2, 'Kuje East MeshGrid', 'Fatima K.', 'Escalated', '2026-05-05'),
   (3, 'Kwali Cluster MeshGrid', 'Amaka O.', 'Open', '2026-05-12');
 
-insert into public.deployment_sites (id, site, project, "householdsInstalled") values
-  (1, 'Kwali North', 'Kwali Cluster MeshGrid', 140),
-  (2, 'Kwali South', 'Kwali Cluster MeshGrid', 180),
-  (3, 'Bwari East', 'Bwari Rural MeshGrid', 80);
+insert into public.deployment_sites (id, sitename, project, state, "LGA", connections, "PV") values
+  (1, 'Kwali North', 'Kwali Cluster MeshGrid', 'FCT', 'Kwali', 140, 42),
+  (2, 'Kwali South', 'Kwali Cluster MeshGrid', 'FCT', 'Gwagwalada', 180, 54),
+  (3, 'Bwari East', 'Bwari Rural MeshGrid', 'FCT', 'Bwari', 80, 24);
 
 -- ─── MIGRATION: run this block on existing databases instead of the full script ─
 -- alter table public.projects add column if not exists connections integer default 0;

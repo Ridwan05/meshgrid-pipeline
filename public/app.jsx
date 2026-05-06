@@ -13,7 +13,7 @@ const HEADERS = {
 const DB_TABLES = {
   projects: {
     name: "projects",
-    columns: ["id", "name", "developer", "state", "stage", "clusterLead", "rag", "size", "connections", "pvCapacity", "loi", "jda", "credit", "fc", "startDate", "targetCompletion", "actualCompletion", "subsidyExpected", "capexPerConn", "duration", "issue", "lastUpdate", "targetClose", "updateCompliance", "evidenceCompliance"],
+    columns: ["id", "name", "developer", "state", "stage", "clusterLead", "rag", "size", "connections", "pvCapacity", "loi", "jda", "credit", "fc", "startDate", "targetCompletion", "actualCompletion", "subsidyExpected", "capexPerConn", "duration", "issue", "lastUpdate", "targetClose", "updateCompliance", "evidenceCompliance", "jdacost"],
   },
   team: {
     name: "team_members",
@@ -25,7 +25,7 @@ const DB_TABLES = {
   },
   deployment: {
     name: "deployment_sites",
-    columns: ["id", "site", "project", "householdsInstalled"],
+    columns: ["id", "sitename", "project", "state", "LGA", "connections", "PV"],
   },
 };
 
@@ -65,6 +65,7 @@ function defaultRow(table, row) {
       targetClose: "",
       updateCompliance: 100,
       evidenceCompliance: 100,
+      jdacost: 0,
     };
   }
 
@@ -78,16 +79,12 @@ function defaultRow(table, row) {
 
   return {
     id: row.id,
-    site: "",
+    sitename: "",
     project: "",
     state: "",
-    village: "",
-    householdsPlanned: 0,
-    householdsInstalled: 0,
-    teams: 1,
-    dailyRate: 0,
-    startDate: today(),
-    daysActive: 0,
+    LGA: "",
+    connections: 0,
+    PV: 0,
   };
 }
 
@@ -144,11 +141,11 @@ async function dbSet(table, payload) {
 
 // ─── SEED DATA ────────────────────────────────────────────────────────────────
 const SEED_PROJECTS = [
-  { id: 1, name: "Kwali Cluster MeshGrid", developer: "SolarNG Ltd", state: "FCT", stage: "Project Development", clusterLead: "Amaka O.", rag: "Green", loi: true, jda: true, credit: false, fc: false, size: 12.8, connections: 800, pvCapacity: 0, startDate: "2025-11-01", targetCompletion: "2026-06-30", actualCompletion: "", subsidyExpected: 48000000, capexPerConn: 95000, duration: 0, issue: "", lastUpdate: "2026-05-01", targetClose: "Q4 2026", updateCompliance: 95, evidenceCompliance: 90 },
-  { id: 2, name: "Bwari Rural MeshGrid", developer: "GreenPower NG", state: "FCT", stage: "Project Preparation", clusterLead: "Emeka T.", rag: "Amber", loi: true, jda: true, credit: false, fc: false, size: 8.4, connections: 600, pvCapacity: 0, startDate: "2026-01-15", targetCompletion: "2026-09-30", actualCompletion: "", subsidyExpected: 36000000, capexPerConn: 102000, duration: 0, issue: "LOI counterparty signature delayed", lastUpdate: "2026-04-28", targetClose: "Q1 2027", updateCompliance: 70, evidenceCompliance: 65 },
-  { id: 3, name: "Kuje East MeshGrid", developer: "Volts Africa", state: "FCT", stage: "Project Preparation", clusterLead: "Fatima K.", rag: "Red", loi: true, jda: false, credit: false, fc: false, size: 9.6, connections: 450, pvCapacity: 0, startDate: "2025-12-01", targetCompletion: "2026-05-31", actualCompletion: "", subsidyExpected: 27000000, capexPerConn: 110000, duration: 0, issue: "Financial model incomplete — Promise yet to update", lastUpdate: "2026-04-25", targetClose: "Q2 2027", updateCompliance: 60, evidenceCompliance: 55 },
-  { id: 4, name: "Nasarawa South MeshGrid", developer: "EnergyCo NG", state: "Nasarawa", stage: "Preliminary Assessment", clusterLead: "Amaka O.", rag: "Green", loi: true, jda: false, credit: false, fc: false, size: 7.7, connections: 520, pvCapacity: 0, startDate: "2025-08-01", targetCompletion: "2026-04-30", actualCompletion: "", subsidyExpected: 0, capexPerConn: 88000, duration: 0, issue: "", lastUpdate: "2026-04-30", targetClose: "Q3 2027", updateCompliance: 100, evidenceCompliance: 100 },
-  { id: 5, name: "Ogun West MeshGrid", developer: "BrightGrid Ltd", state: "Ogun", stage: "Preliminary Assessment", clusterLead: "Uche B.", rag: "Green", loi: false, jda: false, credit: false, fc: false, size: 24.8, connections: 950, pvCapacity: 0, startDate: "2026-03-01", targetCompletion: "2027-01-31", actualCompletion: "", subsidyExpected: 0, capexPerConn: 91000, duration: 0, issue: "", lastUpdate: "2026-05-01", targetClose: "Q4 2027", updateCompliance: 100, evidenceCompliance: 100 },
+  { id: 1, name: "Kwali Cluster MeshGrid", developer: "SolarNG Ltd", state: "FCT", stage: "Project Development", clusterLead: "Amaka O.", rag: "Green", loi: true, jda: true, credit: false, fc: false, size: 12.8, connections: 800, pvCapacity: 0, startDate: "2025-11-01", targetCompletion: "2026-06-30", actualCompletion: "", subsidyExpected: 48000000, capexPerConn: 95000, duration: 0, issue: "", lastUpdate: "2026-05-01", targetClose: "Q4 2026", updateCompliance: 95, evidenceCompliance: 90, jdacost: 0 },
+  { id: 2, name: "Bwari Rural MeshGrid", developer: "GreenPower NG", state: "FCT", stage: "Project Preparation", clusterLead: "Emeka T.", rag: "Amber", loi: true, jda: true, credit: false, fc: false, size: 8.4, connections: 600, pvCapacity: 0, startDate: "2026-01-15", targetCompletion: "2026-09-30", actualCompletion: "", subsidyExpected: 36000000, capexPerConn: 102000, duration: 0, issue: "LOI counterparty signature delayed", lastUpdate: "2026-04-28", targetClose: "Q1 2027", updateCompliance: 70, evidenceCompliance: 65, jdacost: 0 },
+  { id: 3, name: "Kuje East MeshGrid", developer: "Volts Africa", state: "FCT", stage: "Project Preparation", clusterLead: "Fatima K.", rag: "Red", loi: true, jda: false, credit: false, fc: false, size: 9.6, connections: 450, pvCapacity: 0, startDate: "2025-12-01", targetCompletion: "2026-05-31", actualCompletion: "", subsidyExpected: 27000000, capexPerConn: 110000, duration: 0, issue: "Financial model incomplete — Promise yet to update", lastUpdate: "2026-04-25", targetClose: "Q2 2027", updateCompliance: 60, evidenceCompliance: 55, jdacost: 0 },
+  { id: 4, name: "Nasarawa South MeshGrid", developer: "EnergyCo NG", state: "Nasarawa", stage: "Preliminary Assessment", clusterLead: "Amaka O.", rag: "Green", loi: true, jda: false, credit: false, fc: false, size: 7.7, connections: 520, pvCapacity: 0, startDate: "2025-08-01", targetCompletion: "2026-04-30", actualCompletion: "", subsidyExpected: 0, capexPerConn: 88000, duration: 0, issue: "", lastUpdate: "2026-04-30", targetClose: "Q3 2027", updateCompliance: 100, evidenceCompliance: 100, jdacost: 0 },
+  { id: 5, name: "Ogun West MeshGrid", developer: "BrightGrid Ltd", state: "Ogun", stage: "Preliminary Assessment", clusterLead: "Uche B.", rag: "Green", loi: false, jda: false, credit: false, fc: false, size: 24.8, connections: 950, pvCapacity: 0, startDate: "2026-03-01", targetCompletion: "2027-01-31", actualCompletion: "", subsidyExpected: 0, capexPerConn: 91000, duration: 0, issue: "", lastUpdate: "2026-05-01", targetClose: "Q4 2027", updateCompliance: 100, evidenceCompliance: 100, jdacost: 0 },
 ];
 const SEED_TEAM = [
   { id: 1, name: "Amaka O.", role: "Cluster Lead", assigned: 2, tasksDue: 5, overdue: 1, compliance: 90, rag: "Amber" },
@@ -163,9 +160,9 @@ const SEED_ISSUES = [
   { id: 3, project: "Kwali Cluster MeshGrid", category: "Deployment", description: "Daily deployment rate below 90/day — contractor capacity constraint", owner: "Amaka O.", raised: "2026-04-28", due: "2026-05-12", status: "Open", rag: "Amber" },
 ];
 const SEED_DEPLOYMENT = [
-  { id: 1, site: "Kwali North", project: "Kwali Cluster MeshGrid", state: "FCT", village: "Pai", householdsPlanned: 300, householdsInstalled: 140, teams: 2, dailyRate: 8, startDate: "2026-03-01", daysActive: 63 },
-  { id: 2, site: "Kwali South", project: "Kwali Cluster MeshGrid", state: "FCT", village: "Gwagwalada", householdsPlanned: 500, householdsInstalled: 180, teams: 2, dailyRate: 10, startDate: "2026-03-15", daysActive: 49 },
-  { id: 3, site: "Bwari East", project: "Bwari Rural MeshGrid", state: "FCT", village: "Bwari", householdsPlanned: 600, householdsInstalled: 80, teams: 1, dailyRate: 9, startDate: "2026-04-01", daysActive: 32 },
+  { id: 1, sitename: "Kwali North", project: "Kwali Cluster MeshGrid", state: "FCT", LGA: "Kwali", connections: 140, PV: 42 },
+  { id: 2, sitename: "Kwali South", project: "Kwali Cluster MeshGrid", state: "FCT", LGA: "Gwagwalada", connections: 180, PV: 54 },
+  { id: 3, sitename: "Bwari East", project: "Bwari Rural MeshGrid", state: "FCT", LGA: "Bwari", connections: 80, PV: 24 },
 ];
 
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
@@ -273,7 +270,7 @@ function ProjectForm({ form, setForm }) {
   return (
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
       {[["Project Name","name","text"],["Developer","developer","text"],["State","state","text"],["Cluster Lead","clusterLead","text"],["Target FC","targetClose","text"]].map(([l,k]) => <div key={k}><label style={LBL}>{l}</label><input value={form[k]||""} onChange={e=>setForm(f=>({...f,[k]:e.target.value}))} style={INPUT}/></div>)}
-      {[["Size (₦Bn)","size"],["Connections Planned","connections"],["PV Capacity (kWp)","pvCapacity"],["CAPEX/conn (₦)","capexPerConn"],["Subsidy Expected (₦)","subsidyExpected"]].map(([l,k]) => <div key={k}><label style={LBL}>{l}</label><input type="number" value={form[k]??0} onChange={e=>setForm(f=>({...f,[k]:Number(e.target.value)}))} style={INPUT}/></div>)}
+      {[["Size (₦Bn)","size"],["Connections Planned","connections"],["PV Capacity (kWp)","pvCapacity"],["CAPEX/conn (₦)","capexPerConn"],["Subsidy Expected (₦)","subsidyExpected"],["JDA Cost (₦)","jdacost"]].map(([l,k]) => <div key={k}><label style={LBL}>{l}</label><input type="number" value={form[k]??0} onChange={e=>setForm(f=>({...f,[k]:Number(e.target.value)}))} style={INPUT}/></div>)}
       <div><label style={LBL}>Start Date</label><input type="date" value={form.startDate||""} onChange={e=>{const sd=e.target.value;setForm(f=>({...f,startDate:sd,targetCompletion:sd?addWorkingDays(sd,90):f.targetCompletion}));}} style={INPUT}/></div>
       <div><label style={LBL}>Target Completion</label><input type="date" value={form.targetCompletion||""} onChange={e=>setForm(f=>({...f,targetCompletion:e.target.value}))} style={INPUT}/></div>
       <div><label style={LBL}>Stage</label><select value={form.stage} onChange={e=>setForm(f=>({...f,stage:e.target.value}))} style={INPUT}>{STAGES_LIST.map(s=><option key={s}>{s}</option>)}</select></div>
@@ -305,9 +302,9 @@ function App() {
   const [siteModal, setSiteModal] = useState(null);
   const [teamModal, setTeamModal] = useState(null);
 
-  const blankProject = () => ({ id: Date.now(), name: "", developer: "", state: "", stage: STAGES_LIST[0], clusterLead: "", rag: "Green", loi: false, jda: false, credit: false, fc: false, size: 0, connections: 0, pvCapacity: 0, startDate: "", targetCompletion: "", actualCompletion: "", subsidyExpected: 0, capexPerConn: 0, duration: 0, issue: "", lastUpdate: today(), targetClose: "", updateCompliance: 100, evidenceCompliance: 100 });
+  const blankProject = () => ({ id: Date.now(), name: "", developer: "", state: "", stage: STAGES_LIST[0], clusterLead: "", rag: "Green", loi: false, jda: false, credit: false, fc: false, size: 0, connections: 0, pvCapacity: 0, startDate: "", targetCompletion: "", actualCompletion: "", subsidyExpected: 0, capexPerConn: 0, duration: 0, issue: "", lastUpdate: today(), targetClose: "", updateCompliance: 100, evidenceCompliance: 100, jdacost: 0 });
   const blankIssue = () => ({ id: Date.now(), project: "", category: ISSUE_CATS[0], description: "", owner: "", raised: today(), due: "", status: "Open", rag: "Amber" });
-  const blankSite = () => ({ id: Date.now(), site: "", project: "", state: "", village: "", householdsPlanned: 0, householdsInstalled: 0, teams: 1, dailyRate: 0, startDate: today(), daysActive: 0 });
+  const blankSite = () => ({ id: Date.now(), sitename: "", project: "", state: "", LGA: "", connections: 0, PV: 0 });
   const blankMember = () => ({ id: Date.now(), name: "", role: ROLES[0], assigned: 0, tasksDue: 0, overdue: 0, compliance: 100, rag: "Green" });
 
   const [pForm, setPForm] = useState(blankProject());
@@ -350,7 +347,7 @@ function App() {
   const saveProject = () => { if (!pForm.name.trim()) return alert("Project name is required"); const duration = countWorkingDays(pForm.startDate, pForm.actualCompletion || today()); const projectToSave = { ...pForm, duration }; projectModal === "add" ? setProjects(ps => [...ps, { ...projectToSave, id: Date.now() }]) : setProjects(ps => ps.map(p => p.id === projectModal ? { ...projectToSave } : p)); flash(); setProjectModal(null); };
   const saveIssue = () => { if (!iForm.project.trim() || !iForm.description.trim()) return alert("Project and description required"); issueModal === "add" ? setIssues(is => [...is, { ...iForm, id: Date.now() }]) : setIssues(is => is.map(i => i.id === issueModal ? { ...iForm } : i)); flash(); setIssueModal(null); };
   const updateIssueStatus = (id, status) => { setIssues(is => is.map(i => i.id === id ? { ...i, status, rag: status === "Resolved" ? "Green" : status === "Escalated" ? "Red" : "Amber" } : i)); flash(); };
-  const saveSite = () => { if (!sForm.site.trim()) return alert("Site name is required"); siteModal === "add" ? setDeployment(ds => [...ds, { ...sForm, id: Date.now() }]) : setDeployment(ds => ds.map(d => d.id === siteModal ? { ...sForm } : d)); flash(); setSiteModal(null); };
+  const saveSite = () => { if (!sForm.sitename.trim()) return alert("Site name is required"); siteModal === "add" ? setDeployment(ds => [...ds, { ...sForm, id: Date.now() }]) : setDeployment(ds => ds.map(d => d.id === siteModal ? { ...sForm } : d)); flash(); setSiteModal(null); };
   const saveMember = () => { if (!mForm.name.trim()) return alert("Name is required"); teamModal === "add" ? setTeam(ts => [...ts, { ...mForm, id: Date.now() }]) : setTeam(ts => ts.map(t => t.id === teamModal ? { ...mForm } : t)); flash(); setTeamModal(null); };
   const executeDelete = () => { const { type, id } = confirmDelete; if (type === "project") setProjects(ps => ps.filter(p => p.id !== id)); if (type === "issue") setIssues(is => is.filter(i => i.id !== id)); if (type === "site") setDeployment(ds => ds.filter(d => d.id !== id)); if (type === "member") setTeam(ts => ts.filter(t => t.id !== id)); flash(); setConfirmDelete(null); };
 
@@ -446,7 +443,7 @@ function App() {
             {viewMode === "list" ? (
               <div style={{background:"#fff",borderRadius:10,overflow:"hidden",boxShadow:"0 2px 8px rgba(0,0,0,0.07)"}}>
                 <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-                  <thead><tr style={{background:"#1a2a4a",color:"#fff"}}>{["PROJECT","DEVELOPER","STATE","STAGE","LEAD","CONN.","PV (kWp)","DURATION","SIZE","LOI","JDA","RAG","ISSUE",""].map(h=><th key={h} style={{padding:"10px 10px",textAlign:"left",fontSize:9,fontWeight:800,letterSpacing:0.8,whiteSpace:"nowrap"}}>{h}</th>)}</tr></thead>
+                  <thead><tr style={{background:"#1a2a4a",color:"#fff"}}>{["PROJECT","DEVELOPER","STATE","STAGE","LEAD","CONN.","PV (kWp)","DURATION","SIZE","JDA COST","LOI","JDA","RAG","ISSUE",""].map(h=><th key={h} style={{padding:"10px 10px",textAlign:"left",fontSize:9,fontWeight:800,letterSpacing:0.8,whiteSpace:"nowrap"}}>{h}</th>)}</tr></thead>
                   <tbody>
                     {filteredProjects.map((p,i)=>(
                       <tr key={p.id} style={{background:i%2===0?"#f7f9fc":"#fff",borderBottom:"1px solid #eef"}}>
@@ -459,6 +456,7 @@ function App() {
                         <td style={{padding:"9px 10px",fontWeight:700}}>{p.pvCapacity||"—"}</td>
                         <td style={{padding:"9px 10px",color:"#555"}}>{p.duration?`${p.duration}d`:"—"}</td>
                         <td style={{padding:"9px 10px",fontWeight:700}}>₦{p.size.toFixed(1)}Bn</td>
+                        <td style={{padding:"9px 10px",color:"#555"}}>{p.jdacost?`₦${fmt(p.jdacost)}`:"—"}</td>
                         <td style={{padding:"9px 10px",textAlign:"center"}}><Tick val={p.loi}/></td>
                         <td style={{padding:"9px 10px",textAlign:"center"}}><Tick val={p.jda}/></td>
                         <td style={{padding:"9px 10px"}}><RagBadge status={p.rag}/></td>
@@ -523,43 +521,31 @@ function App() {
             <SectionHeader label="DEPLOYMENT TRACKER"/>
             <button onClick={()=>{setSForm(blankSite());setSiteModal("add");}} style={{background:"#3b6cb7",color:"#fff",border:"none",borderRadius:8,padding:"8px 18px",cursor:"pointer",fontWeight:700,fontSize:12,marginBottom:14}}>+ Add Site</button>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:14,marginBottom:22}}>
-            {deployment.map(site=>{
-              const pctV=pct(site.householdsInstalled,site.householdsPlanned);
-              const remaining=site.householdsPlanned-site.householdsInstalled;
-              const projDays=site.dailyRate>0?Math.ceil(remaining/site.dailyRate):null;
-              return <div key={site.id} style={{background:"#fff",borderRadius:10,padding:18,boxShadow:"0 2px 8px rgba(0,0,0,0.07)",borderTop:`3px solid ${pctV>=80?"#3a9e5f":pctV>=50?"#d97706":"#dc2626"}`}}>
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:2}}><div style={{fontWeight:800,fontSize:13,color:"#1a2a4a"}}>{site.site}</div><div><button onClick={()=>{setSForm({...site});setSiteModal(site.id);}} style={EDIT_BTN}>✏️</button><button onClick={()=>setConfirmDelete({type:"site",id:site.id,label:site.site})} style={DEL_BTN}>🗑️</button></div></div>
-                <div style={{fontSize:11,color:"#888",marginBottom:10}}>{site.project} · {site.village}, {site.state}</div>
-                <ProgressBar value={site.householdsInstalled} max={site.householdsPlanned}/>
-                <div style={{display:"flex",justifyContent:"space-between",marginTop:5,marginBottom:12}}><span style={{fontSize:11,color:"#666"}}>{fmt(site.householdsInstalled)} installed</span><span style={{fontSize:12,fontWeight:800,color:pctV>=80?"#3a9e5f":pctV>=50?"#d97706":"#dc2626"}}>{pctV}%</span><span style={{fontSize:11,color:"#666"}}>{fmt(site.householdsPlanned)} planned</span></div>
-                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6}}>{[["Daily Rate",`${site.dailyRate}/day`,site.dailyRate>=90?"Green":site.dailyRate>=60?"Amber":"Red"],["Teams",site.teams,"Green"],["Proj. Days",projDays?`${projDays}d`:"—","Amber"]].map(([k,v,r])=><div key={k} style={{background:RAG_LIGHT[r]||"#f5f5f5",borderRadius:6,padding:"5px 8px",textAlign:"center"}}><div style={{fontSize:9,color:"#888",fontWeight:700}}>{k}</div><div style={{fontSize:13,fontWeight:800,color:RAG_C[r]||"#555"}}>{v}</div></div>)}</div>
-              </div>;
-            })}
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:14,marginBottom:22}}>
+            {deployment.map(site=>(
+              <div key={site.id} style={{background:"#fff",borderRadius:10,padding:18,boxShadow:"0 2px 8px rgba(0,0,0,0.07)",borderTop:"3px solid #3b6cb7"}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:2}}><div style={{fontWeight:800,fontSize:13,color:"#1a2a4a"}}>{site.sitename}</div><div><button onClick={()=>{setSForm({...site});setSiteModal(site.id);}} style={EDIT_BTN}>✏️</button><button onClick={()=>setConfirmDelete({type:"site",id:site.id,label:site.sitename})} style={DEL_BTN}>🗑️</button></div></div>
+                <div style={{fontSize:11,color:"#888",marginBottom:10}}>{site.project} · {site.LGA}, {site.state}</div>
+                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>{[["Connections",fmt(site.connections)],["PV (kWp)",site.PV||"—"],["State",site.state||"—"],["LGA",site.LGA||"—"]].map(([k,v])=><div key={k} style={{background:"#f5f7fa",borderRadius:6,padding:"5px 8px"}}><div style={{fontSize:9,color:"#aaa",fontWeight:700}}>{k}</div><div style={{fontSize:12,fontWeight:700,color:"#1a2a4a"}}>{v}</div></div>)}</div>
+              </div>
+            ))}
           </div>
           <div style={{background:"#fff",borderRadius:10,overflow:"hidden",boxShadow:"0 2px 8px rgba(0,0,0,0.07)"}}>
             <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-              <thead><tr style={{background:"#1a2a4a",color:"#fff"}}>{["SITE","PROJECT","STATE","VILLAGE","PLANNED","INSTALLED","TEAMS","DAILY RATE","DAYS ACTIVE","PROJ. COMPLETION",""].map(h=><th key={h} style={{padding:"10px 10px",textAlign:"left",fontSize:9,fontWeight:800,letterSpacing:0.7}}>{h}</th>)}</tr></thead>
+              <thead><tr style={{background:"#1a2a4a",color:"#fff"}}>{["SITE","PROJECT","STATE","LGA","CONNECTIONS","PV (kWp)",""].map(h=><th key={h} style={{padding:"10px 10px",textAlign:"left",fontSize:9,fontWeight:800,letterSpacing:0.7}}>{h}</th>)}</tr></thead>
               <tbody>
-                {deployment.map((site,i)=>{
-                  const remaining=site.householdsPlanned-site.householdsInstalled;
-                  const projDays=site.dailyRate>0?Math.ceil(remaining/site.dailyRate):null;
-                  const projDate=projDays?new Date(Date.now()+projDays*86400000).toLocaleDateString("en-NG",{day:"2-digit",month:"short",year:"numeric"}):"—";
-                  return <tr key={site.id} style={{background:i%2===0?"#f7f9fc":"#fff",borderBottom:"1px solid #eef"}}>
-                    <td style={{padding:"9px 10px",fontWeight:700}}>{site.site}</td>
+                {deployment.map((site,i)=>(
+                  <tr key={site.id} style={{background:i%2===0?"#f7f9fc":"#fff",borderBottom:"1px solid #eef"}}>
+                    <td style={{padding:"9px 10px",fontWeight:700}}>{site.sitename}</td>
                     <td style={{padding:"9px 10px",color:"#555",fontSize:11}}>{site.project.replace(" MeshGrid","")}</td>
                     <td style={{padding:"9px 10px",color:"#666"}}>{site.state}</td>
-                    <td style={{padding:"9px 10px",color:"#666"}}>{site.village}</td>
-                    <td style={{padding:"9px 10px"}}>{fmt(site.householdsPlanned)}</td>
-                    <td style={{padding:"9px 10px",fontWeight:700}}>{fmt(site.householdsInstalled)}</td>
-                    <td style={{padding:"9px 10px",textAlign:"center"}}>{site.teams}</td>
-                    <td style={{padding:"9px 10px",color:site.dailyRate>=90?"#3a9e5f":site.dailyRate>=60?"#d97706":"#dc2626",fontWeight:700}}>{site.dailyRate}/day</td>
-                    <td style={{padding:"9px 10px"}}>{site.daysActive}d</td>
-                    <td style={{padding:"9px 10px",fontSize:11,color:"#555"}}>{projDate}</td>
-                    <td style={{padding:"9px 10px",whiteSpace:"nowrap"}}><button onClick={()=>{setSForm({...site});setSiteModal(site.id);}} style={EDIT_BTN}>✏️</button><button onClick={()=>setConfirmDelete({type:"site",id:site.id,label:site.site})} style={DEL_BTN}>🗑️</button></td>
-                  </tr>;
-                })}
-                <tr style={{background:"#1a2a4a",color:"#fff",fontWeight:800,fontSize:12}}><td colSpan={4} style={{padding:"9px 10px"}}>TOTAL</td><td style={{padding:"9px 10px"}}>{fmt(deployment.reduce((s,d)=>s+d.householdsPlanned,0))}</td><td style={{padding:"9px 10px"}}>{fmt(deployment.reduce((s,d)=>s+d.householdsInstalled,0))}</td><td colSpan={5}/></tr>
+                    <td style={{padding:"9px 10px",color:"#666"}}>{site.LGA}</td>
+                    <td style={{padding:"9px 10px",fontWeight:700}}>{fmt(site.connections)}</td>
+                    <td style={{padding:"9px 10px"}}>{site.PV||"—"}</td>
+                    <td style={{padding:"9px 10px",whiteSpace:"nowrap"}}><button onClick={()=>{setSForm({...site});setSiteModal(site.id);}} style={EDIT_BTN}>✏️</button><button onClick={()=>setConfirmDelete({type:"site",id:site.id,label:site.sitename})} style={DEL_BTN}>🗑️</button></td>
+                  </tr>
+                ))}
+                <tr style={{background:"#1a2a4a",color:"#fff",fontWeight:800,fontSize:12}}><td colSpan={4} style={{padding:"9px 10px"}}>TOTAL</td><td style={{padding:"9px 10px"}}>{fmt(deployment.reduce((s,d)=>s+d.connections,0))}</td><td style={{padding:"9px 10px"}}>{deployment.reduce((s,d)=>s+(d.PV||0),0)}</td><td/></tr>
               </tbody>
             </table>
           </div>
@@ -657,7 +643,12 @@ function App() {
 
       {siteModal!==null&&<Modal title={siteModal==="add"?"Add Deployment Site":"Edit Site"} onClose={()=>setSiteModal(null)} onSave={saveSite}>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-          {[["Site Name","site","text"],["Project","project","text"],["State","state","text"],["Village","village","text"],["Households Planned","householdsPlanned","number"],["Households Installed","householdsInstalled","number"],["Teams Assigned","teams","number"],["Daily Rate","dailyRate","number"],["Days Active","daysActive","number"],["Start Date","startDate","date"]].map(([l,k,t])=><div key={k}><label style={LBL}>{l}</label><input type={t} value={sForm[k]??""} onChange={e=>setSForm(f=>({...f,[k]:t==="number"?Number(e.target.value):e.target.value}))} style={INPUT}/></div>)}
+          <div><label style={LBL}>Site Name</label><input value={sForm.sitename||""} onChange={e=>setSForm(f=>({...f,sitename:e.target.value}))} style={INPUT}/></div>
+          <div><label style={LBL}>Project</label><select value={sForm.project||""} onChange={e=>setSForm(f=>({...f,project:e.target.value}))} style={INPUT}><option value="">— Select Project —</option>{projects.map(p=><option key={p.id} value={p.name}>{p.name}</option>)}</select></div>
+          <div><label style={LBL}>State</label><input value={sForm.state||""} onChange={e=>setSForm(f=>({...f,state:e.target.value}))} style={INPUT}/></div>
+          <div><label style={LBL}>LGA</label><input value={sForm.LGA||""} onChange={e=>setSForm(f=>({...f,LGA:e.target.value}))} style={INPUT}/></div>
+          <div><label style={LBL}>Connections</label><input type="number" value={sForm.connections??0} onChange={e=>setSForm(f=>({...f,connections:Number(e.target.value)}))} style={INPUT}/></div>
+          <div><label style={LBL}>PV (kWp)</label><input type="number" value={sForm.PV??0} onChange={e=>setSForm(f=>({...f,PV:Number(e.target.value)}))} style={INPUT}/></div>
         </div>
       </Modal>}
 
