@@ -31,11 +31,11 @@ async function dbSet(table, payload) {
 
 // ─── SEED DATA ────────────────────────────────────────────────────────────────
 const SEED_PROJECTS = [
-  { id: 1, name: "Kwali Cluster MeshGrid", developer: "SolarNG Ltd", state: "FCT", stage: "Project Development", clusterLead: "Amaka O.", rag: "Green", loi: true, jda: true, credit: false, fc: false, size: 12.8, connections: 800, connectionsInstalled: 320, dailyRate: 18, stageStart: "2025-11-01", targetCompletion: "2026-06-30", actualCompletion: "", subsidyExpected: 48000000, subsidyReceived: 12000000, capexPerConn: 95000, arpu: 8500, opex: 2200000, issue: "", owner: "Amaka O.", lastUpdate: "2026-05-01", targetClose: "Q4 2026", timeToFirstPower: 3, updateCompliance: 95, evidenceCompliance: 90 },
-  { id: 2, name: "Bwari Rural MeshGrid", developer: "GreenPower NG", state: "FCT", stage: "Project Preparation", clusterLead: "Emeka T.", rag: "Amber", loi: true, jda: true, credit: false, fc: false, size: 8.4, connections: 600, connectionsInstalled: 80, dailyRate: 9, stageStart: "2026-01-15", targetCompletion: "2026-09-30", actualCompletion: "", subsidyExpected: 36000000, subsidyReceived: 0, capexPerConn: 102000, arpu: 7800, opex: 1800000, issue: "LOI counterparty signature delayed", owner: "Emeka T.", lastUpdate: "2026-04-28", targetClose: "Q1 2027", timeToFirstPower: null, updateCompliance: 70, evidenceCompliance: 65 },
-  { id: 3, name: "Kuje East MeshGrid", developer: "Volts Africa", state: "FCT", stage: "Project Preparation", clusterLead: "Fatima K.", rag: "Red", loi: true, jda: false, credit: false, fc: false, size: 9.6, connections: 450, connectionsInstalled: 0, dailyRate: 0, stageStart: "2025-12-01", targetCompletion: "2026-05-31", actualCompletion: "", subsidyExpected: 27000000, subsidyReceived: 0, capexPerConn: 110000, arpu: 8000, opex: 1600000, issue: "Financial model incomplete — Promise yet to update", owner: "Fatima K.", lastUpdate: "2026-04-25", targetClose: "Q2 2027", timeToFirstPower: null, updateCompliance: 60, evidenceCompliance: 55 },
-  { id: 4, name: "Nasarawa South MeshGrid", developer: "EnergyCo NG", state: "Nasarawa", stage: "Preliminary Assessment", clusterLead: "Amaka O.", rag: "Green", loi: true, jda: false, credit: false, fc: false, size: 7.7, connections: 520, connectionsInstalled: 0, dailyRate: 0, stageStart: "2025-08-01", targetCompletion: "2026-04-30", actualCompletion: "", subsidyExpected: 0, subsidyReceived: 0, capexPerConn: 88000, arpu: 9200, opex: 3100000, issue: "", owner: "Amaka O.", lastUpdate: "2026-04-30", targetClose: "Q3 2027", timeToFirstPower: null, updateCompliance: 100, evidenceCompliance: 100 },
-  { id: 5, name: "Ogun West MeshGrid", developer: "BrightGrid Ltd", state: "Ogun", stage: "Preliminary Assessment", clusterLead: "Uche B.", rag: "Green", loi: false, jda: false, credit: false, fc: false, size: 24.8, connections: 950, connectionsInstalled: 0, dailyRate: 0, stageStart: "2026-03-01", targetCompletion: "2027-01-31", actualCompletion: "", subsidyExpected: 0, subsidyReceived: 0, capexPerConn: 91000, arpu: 8800, opex: 2800000, issue: "", owner: "Uche B.", lastUpdate: "2026-05-01", targetClose: "Q4 2027", timeToFirstPower: null, updateCompliance: 100, evidenceCompliance: 100 },
+  { id: 1, name: "Kwali Cluster MeshGrid", developer: "SolarNG Ltd", state: "FCT", stage: "Project Development", clusterLead: "Amaka O.", rag: "Green", loi: true, jda: true, credit: false, fc: false, size: 12.8, connections: 800, pvCapacity: 0, startDate: "2025-11-01", targetCompletion: "2026-06-30", actualCompletion: "", subsidyExpected: 48000000, capexPerConn: 95000, duration: 0, issue: "", lastUpdate: "2026-05-01", targetClose: "Q4 2026", updateCompliance: 95, evidenceCompliance: 90 },
+  { id: 2, name: "Bwari Rural MeshGrid", developer: "GreenPower NG", state: "FCT", stage: "Project Preparation", clusterLead: "Emeka T.", rag: "Amber", loi: true, jda: true, credit: false, fc: false, size: 8.4, connections: 600, pvCapacity: 0, startDate: "2026-01-15", targetCompletion: "2026-09-30", actualCompletion: "", subsidyExpected: 36000000, capexPerConn: 102000, duration: 0, issue: "LOI counterparty signature delayed", lastUpdate: "2026-04-28", targetClose: "Q1 2027", updateCompliance: 70, evidenceCompliance: 65 },
+  { id: 3, name: "Kuje East MeshGrid", developer: "Volts Africa", state: "FCT", stage: "Project Preparation", clusterLead: "Fatima K.", rag: "Red", loi: true, jda: false, credit: false, fc: false, size: 9.6, connections: 450, pvCapacity: 0, startDate: "2025-12-01", targetCompletion: "2026-05-31", actualCompletion: "", subsidyExpected: 27000000, capexPerConn: 110000, duration: 0, issue: "Financial model incomplete — Promise yet to update", lastUpdate: "2026-04-25", targetClose: "Q2 2027", updateCompliance: 60, evidenceCompliance: 55 },
+  { id: 4, name: "Nasarawa South MeshGrid", developer: "EnergyCo NG", state: "Nasarawa", stage: "Preliminary Assessment", clusterLead: "Amaka O.", rag: "Green", loi: true, jda: false, credit: false, fc: false, size: 7.7, connections: 520, pvCapacity: 0, startDate: "2025-08-01", targetCompletion: "2026-04-30", actualCompletion: "", subsidyExpected: 0, capexPerConn: 88000, duration: 0, issue: "", lastUpdate: "2026-04-30", targetClose: "Q3 2027", updateCompliance: 100, evidenceCompliance: 100 },
+  { id: 5, name: "Ogun West MeshGrid", developer: "BrightGrid Ltd", state: "Ogun", stage: "Preliminary Assessment", clusterLead: "Uche B.", rag: "Green", loi: false, jda: false, credit: false, fc: false, size: 24.8, connections: 950, pvCapacity: 0, startDate: "2026-03-01", targetCompletion: "2027-01-31", actualCompletion: "", subsidyExpected: 0, capexPerConn: 91000, duration: 0, issue: "", lastUpdate: "2026-05-01", targetClose: "Q4 2027", updateCompliance: 100, evidenceCompliance: 100 },
 ];
 const SEED_TEAM = [
   { id: 1, name: "Amaka O.", role: "Cluster Lead", assigned: 2, tasksDue: 5, overdue: 1, compliance: 90, rag: "Amber" },
@@ -73,6 +73,8 @@ const fmt = (n) => n?.toLocaleString("en-NG") ?? "—";
 const pct = (a, b) => b ? Math.round((a / b) * 100) : 0;
 const ragFor = (val, target, higher = true) => { const r = val / target; if (higher) return r >= 0.9 ? "Green" : r >= 0.6 ? "Amber" : "Red"; return r <= 1.1 ? "Green" : r <= 1.4 ? "Amber" : "Red"; };
 const today = () => new Date().toISOString().split("T")[0];
+const addWorkingDays = (startDate, days) => { const d = new Date(startDate); let added = 0; while (added < days) { d.setDate(d.getDate() + 1); const day = d.getDay(); if (day !== 0 && day !== 6) added++; } return d.toISOString().split("T")[0]; };
+const countWorkingDays = (start, end) => { if (!start || !end) return 0; const s = new Date(start), e = new Date(end); if (e <= s) return 0; let count = 0; const cur = new Date(s); cur.setDate(cur.getDate() + 1); while (cur <= e) { const day = cur.getDay(); if (day !== 0 && day !== 6) count++; cur.setDate(cur.getDate() + 1); } return count; };
 const INPUT = { padding: "7px 10px", borderRadius: 6, border: "1.5px solid #dde", fontSize: 13, fontFamily: "inherit", width: "100%", boxSizing: "border-box", background: "#f7f8fa" };
 const LBL = { fontSize: 11, color: "#888", fontWeight: 700, display: "block", marginBottom: 3 };
 const EDIT_BTN = { background: "#f0f4ff", border: "none", borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 12, marginRight: 4 };
@@ -157,9 +159,10 @@ function Confirm({ message, onConfirm, onCancel }) {
 function ProjectForm({ form, setForm }) {
   return (
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-      {[["Project Name","name","text"],["Developer","developer","text"],["State","state","text"],["Cluster Lead","clusterLead","text"],["Owner","owner","text"],["Target FC","targetClose","text"]].map(([l,k]) => <div key={k}><label style={LBL}>{l}</label><input value={form[k]||""} onChange={e=>setForm(f=>({...f,[k]:e.target.value}))} style={INPUT}/></div>)}
-      {[["Size (₦Bn)","size"],["Connections Planned","connections"],["Connections Installed","connectionsInstalled"],["Daily Rate","dailyRate"],["CAPEX/conn (₦)","capexPerConn"],["ARPU (₦)","arpu"],["Subsidy Expected (₦)","subsidyExpected"],["Subsidy Received (₦)","subsidyReceived"]].map(([l,k]) => <div key={k}><label style={LBL}>{l}</label><input type="number" value={form[k]??0} onChange={e=>setForm(f=>({...f,[k]:Number(e.target.value)}))} style={INPUT}/></div>)}
-      {[["Stage Start","stageStart"],["Target Completion","targetCompletion"]].map(([l,k]) => <div key={k}><label style={LBL}>{l}</label><input type="date" value={form[k]||""} onChange={e=>setForm(f=>({...f,[k]:e.target.value}))} style={INPUT}/></div>)}
+      {[["Project Name","name","text"],["Developer","developer","text"],["State","state","text"],["Cluster Lead","clusterLead","text"],["Target FC","targetClose","text"]].map(([l,k]) => <div key={k}><label style={LBL}>{l}</label><input value={form[k]||""} onChange={e=>setForm(f=>({...f,[k]:e.target.value}))} style={INPUT}/></div>)}
+      {[["Size (₦Bn)","size"],["Connections Planned","connections"],["PV Capacity (kWp)","pvCapacity"],["CAPEX/conn (₦)","capexPerConn"],["Subsidy Expected (₦)","subsidyExpected"]].map(([l,k]) => <div key={k}><label style={LBL}>{l}</label><input type="number" value={form[k]??0} onChange={e=>setForm(f=>({...f,[k]:Number(e.target.value)}))} style={INPUT}/></div>)}
+      <div><label style={LBL}>Start Date</label><input type="date" value={form.startDate||""} onChange={e=>{const sd=e.target.value;setForm(f=>({...f,startDate:sd,targetCompletion:sd?addWorkingDays(sd,90):f.targetCompletion}));}} style={INPUT}/></div>
+      <div><label style={LBL}>Target Completion</label><input type="date" value={form.targetCompletion||""} onChange={e=>setForm(f=>({...f,targetCompletion:e.target.value}))} style={INPUT}/></div>
       <div><label style={LBL}>Stage</label><select value={form.stage} onChange={e=>setForm(f=>({...f,stage:e.target.value}))} style={INPUT}>{STAGES_LIST.map(s=><option key={s}>{s}</option>)}</select></div>
       <div><label style={LBL}>RAG</label><select value={form.rag} onChange={e=>setForm(f=>({...f,rag:e.target.value}))} style={INPUT}>{["Green","Amber","Red"].map(r=><option key={r}>{r}</option>)}</select></div>
       <div style={{gridColumn:"span 2"}}><label style={LBL}>Milestones</label><div style={{display:"flex",gap:20,marginTop:4}}>{[["LOI","loi"],["JDA","jda"],["Credit Approval","credit"],["Financial Close","fc"]].map(([l,k])=><label key={k} style={{display:"flex",alignItems:"center",gap:6,fontSize:13,cursor:"pointer"}}><input type="checkbox" checked={!!form[k]} onChange={e=>setForm(f=>({...f,[k]:e.target.checked}))}/> {l}</label>)}</div></div>
@@ -189,7 +192,7 @@ export default function App() {
   const [siteModal, setSiteModal] = useState(null);
   const [teamModal, setTeamModal] = useState(null);
 
-  const blankProject = () => ({ id: Date.now(), name: "", developer: "", state: "", stage: STAGES_LIST[0], clusterLead: "", rag: "Green", loi: false, jda: false, credit: false, fc: false, size: 0, connections: 0, connectionsInstalled: 0, dailyRate: 0, stageStart: "", targetCompletion: "", actualCompletion: "", subsidyExpected: 0, subsidyReceived: 0, capexPerConn: 0, arpu: 0, opex: 0, issue: "", owner: "", lastUpdate: today(), targetClose: "", timeToFirstPower: null, updateCompliance: 100, evidenceCompliance: 100 });
+  const blankProject = () => ({ id: Date.now(), name: "", developer: "", state: "", stage: STAGES_LIST[0], clusterLead: "", rag: "Green", loi: false, jda: false, credit: false, fc: false, size: 0, connections: 0, pvCapacity: 0, startDate: "", targetCompletion: "", actualCompletion: "", subsidyExpected: 0, capexPerConn: 0, duration: 0, issue: "", lastUpdate: today(), targetClose: "", updateCompliance: 100, evidenceCompliance: 100 });
   const blankIssue = () => ({ id: Date.now(), project: "", category: ISSUE_CATS[0], description: "", owner: "", raised: today(), due: "", status: "Open", rag: "Amber" });
   const blankSite = () => ({ id: Date.now(), site: "", project: "", state: "", village: "", householdsPlanned: 0, householdsInstalled: 0, teams: 1, dailyRate: 0, startDate: today(), daysActive: 0 });
   const blankMember = () => ({ id: Date.now(), name: "", role: ROLES[0], assigned: 0, tasksDue: 0, overdue: 0, compliance: 100, rag: "Green" });
@@ -207,14 +210,9 @@ export default function App() {
     const loiCount = projects.filter(p => p.loi).length;
     const loiToJda = loiCount > 0 ? Math.round((jdasSigned / loiCount) * 100) : 0;
     const toSubmission = projects.length > 0 ? Math.round((projects.filter(p => ["Project Development", "Project Finance", "Financial Close"].includes(p.stage)).length / projects.length) * 100) : 0;
-    const connectionsDelivered = projects.reduce((s, p) => s + (p.connectionsInstalled || 0), 0);
-    const active = projects.filter(p => p.dailyRate > 0);
-    const avgDailyRate = active.length ? Math.round(active.reduce((s, p) => s + p.dailyRate, 0) / active.length) : 0;
-    const ttfp = projects.filter(p => p.timeToFirstPower != null);
-    const avgTTFP = ttfp.length ? ttfp.reduce((s, p) => s + p.timeToFirstPower, 0) / ttfp.length : null;
     const avgUpdateCompliance = projects.length ? Math.round(projects.reduce((s, p) => s + p.updateCompliance, 0) / projects.length) : 0;
     const avgEvidenceCompliance = projects.length ? Math.round(projects.reduce((s, p) => s + p.evidenceCompliance, 0) / projects.length) : 0;
-    return { jdasSigned, loiToJda, toSubmission, connectionsDelivered, avgDailyRate, avgTTFP, avgUpdateCompliance, avgEvidenceCompliance };
+    return { jdasSigned, loiToJda, toSubmission, avgUpdateCompliance, avgEvidenceCompliance };
   }, [projects]);
 
   const stageGroups = useMemo(() => projects ? STAGES_META.map(s => ({ ...s, count: projects.filter(p => p.stage === s.label).length, val: projects.filter(p => p.stage === s.label).reduce((a, p) => a + p.size, 0) })) : [], [projects]);
@@ -236,7 +234,7 @@ export default function App() {
   const filteredProjects = filterStage === "All" ? projects : projects.filter(p => p.stage === filterStage);
   const openIssues = issues.filter(i => i.status !== "Resolved").length;
 
-  const saveProject = () => { if (!pForm.name.trim()) return alert("Project name is required"); projectModal === "add" ? setProjects(ps => [...ps, { ...pForm, id: Date.now() }]) : setProjects(ps => ps.map(p => p.id === projectModal ? { ...pForm } : p)); flash(); setProjectModal(null); };
+  const saveProject = () => { if (!pForm.name.trim()) return alert("Project name is required"); const duration = countWorkingDays(pForm.startDate, pForm.actualCompletion || today()); const projectToSave = { ...pForm, duration }; projectModal === "add" ? setProjects(ps => [...ps, { ...projectToSave, id: Date.now() }]) : setProjects(ps => ps.map(p => p.id === projectModal ? { ...projectToSave } : p)); flash(); setProjectModal(null); };
   const saveIssue = () => { if (!iForm.project.trim() || !iForm.description.trim()) return alert("Project and description required"); issueModal === "add" ? setIssues(is => [...is, { ...iForm, id: Date.now() }]) : setIssues(is => is.map(i => i.id === issueModal ? { ...iForm } : i)); flash(); setIssueModal(null); };
   const updateIssueStatus = (id, status) => { setIssues(is => is.map(i => i.id === id ? { ...i, status, rag: status === "Resolved" ? "Green" : status === "Escalated" ? "Red" : "Amber" } : i)); flash(); };
   const saveSite = () => { if (!sForm.site.trim()) return alert("Site name is required"); siteModal === "add" ? setDeployment(ds => [...ds, { ...sForm, id: Date.now() }]) : setDeployment(ds => ds.map(d => d.id === siteModal ? { ...sForm } : d)); flash(); setSiteModal(null); };
@@ -335,7 +333,7 @@ export default function App() {
             {viewMode === "list" ? (
               <div style={{background:"#fff",borderRadius:10,overflow:"hidden",boxShadow:"0 2px 8px rgba(0,0,0,0.07)"}}>
                 <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-                  <thead><tr style={{background:"#1a2a4a",color:"#fff"}}>{["PROJECT","DEVELOPER","STATE","STAGE","LEAD","CONN.","INSTALLED","RATE","SIZE","LOI","JDA","RAG","ISSUE",""].map(h=><th key={h} style={{padding:"10px 10px",textAlign:"left",fontSize:9,fontWeight:800,letterSpacing:0.8,whiteSpace:"nowrap"}}>{h}</th>)}</tr></thead>
+                  <thead><tr style={{background:"#1a2a4a",color:"#fff"}}>{["PROJECT","DEVELOPER","STATE","STAGE","LEAD","CONN.","PV (kWp)","DURATION","SIZE","LOI","JDA","RAG","ISSUE",""].map(h=><th key={h} style={{padding:"10px 10px",textAlign:"left",fontSize:9,fontWeight:800,letterSpacing:0.8,whiteSpace:"nowrap"}}>{h}</th>)}</tr></thead>
                   <tbody>
                     {filteredProjects.map((p,i)=>(
                       <tr key={p.id} style={{background:i%2===0?"#f7f9fc":"#fff",borderBottom:"1px solid #eef"}}>
@@ -345,8 +343,8 @@ export default function App() {
                         <td style={{padding:"9px 10px"}}><StagePill stage={p.stage}/></td>
                         <td style={{padding:"9px 10px",color:"#555"}}>{p.clusterLead}</td>
                         <td style={{padding:"9px 10px"}}>{fmt(p.connections)}</td>
-                        <td style={{padding:"9px 10px"}}><div style={{fontSize:11}}>{fmt(p.connectionsInstalled)}</div><ProgressBar value={p.connectionsInstalled} max={p.connections}/></td>
-                        <td style={{padding:"9px 10px",color:p.dailyRate>=90?"#3a9e5f":p.dailyRate>=60?"#d97706":p.dailyRate>0?"#dc2626":"#aaa"}}>{p.dailyRate>0?`${p.dailyRate}/day`:"—"}</td>
+                        <td style={{padding:"9px 10px",fontWeight:700}}>{p.pvCapacity||"—"}</td>
+                        <td style={{padding:"9px 10px",color:"#555"}}>{p.duration?`${p.duration}d`:"—"}</td>
                         <td style={{padding:"9px 10px",fontWeight:700}}>₦{p.size.toFixed(1)}Bn</td>
                         <td style={{padding:"9px 10px",textAlign:"center"}}><Tick val={p.loi}/></td>
                         <td style={{padding:"9px 10px",textAlign:"center"}}><Tick val={p.jda}/></td>
@@ -368,8 +366,8 @@ export default function App() {
                     </div>
                     <div style={{fontSize:11,color:"#888",marginBottom:8}}>{p.developer} · {p.state}</div>
                     <StagePill stage={p.stage}/>
-                    <div style={{marginTop:10,marginBottom:6}}><div style={{fontSize:10,color:"#aaa",marginBottom:3}}>Connections: {fmt(p.connectionsInstalled)} / {fmt(p.connections)}</div><ProgressBar value={p.connectionsInstalled} max={p.connections}/></div>
-                    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>{[["Size",`₦${p.size.toFixed(1)}Bn`],["Daily Rate",p.dailyRate?`${p.dailyRate}/day`:"—"],["ARPU",`₦${fmt(p.arpu)}`],["Target FC",p.targetClose||"—"]].map(([k,v])=><div key={k} style={{background:"#f5f7fa",borderRadius:6,padding:"5px 8px"}}><div style={{fontSize:9,color:"#aaa",fontWeight:700}}>{k}</div><div style={{fontSize:12,fontWeight:700,color:"#1a2a4a"}}>{v}</div></div>)}</div>
+                    <div style={{marginTop:10,marginBottom:6}}><div style={{fontSize:10,color:"#aaa",marginBottom:3}}>Connections Planned: {fmt(p.connections)}</div></div>
+                    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>{[["Size",`₦${p.size.toFixed(1)}Bn`],["PV Cap",p.pvCapacity?`${p.pvCapacity} kWp`:"—"],["Target FC",p.targetClose||"—"],["Duration",p.duration?`${p.duration}d`:"—"]].map(([k,v])=><div key={k} style={{background:"#f5f7fa",borderRadius:6,padding:"5px 8px"}}><div style={{fontSize:9,color:"#aaa",fontWeight:700}}>{k}</div><div style={{fontSize:12,fontWeight:700,color:"#1a2a4a"}}>{v}</div></div>)}</div>
                     <div style={{display:"flex",gap:8,marginTop:10,justifyContent:"center"}}>{[["LOI",p.loi],["JDA",p.jda],["Credit",p.credit],["FC",p.fc]].map(([l,d])=><MilestoneDot key={l} label={l} done={d}/>)}</div>
                     {p.issue&&<div style={{marginTop:8,background:"#fef3cd",padding:"5px 10px",borderRadius:6,fontSize:11,color:"#856404"}}>⚠ {p.issue}</div>}
                   </div>
@@ -382,15 +380,12 @@ export default function App() {
         {/* ══ KPI DASHBOARD ══ */}
         {tab === "kpi" && (<>
           <SectionHeader label="KPI DASHBOARD — MESH GRID" />
-          <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:14,marginBottom:14}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:14,marginBottom:14}}>
             <KpiCard label="JDAs Signed" actual={kpis.jdasSigned} target={3} unit="" rag={ragFor(kpis.jdasSigned,3)} detail={`${loiCount} LOIs in pipeline`}/>
             <KpiCard label="LOI → JDA Conversion" actual={kpis.loiToJda} target={80} unit="%" rag={ragFor(kpis.loiToJda,80)} detail={`${jdaCount} of ${loiCount} converted`}/>
             <KpiCard label="Projects to Submission" actual={kpis.toSubmission} target={70} unit="%" rag={ragFor(kpis.toSubmission,70)} detail="At Dev or Finance stage"/>
-            <KpiCard label="Connections Delivered" actual={kpis.connectionsDelivered} target={6000} unit="" rag={ragFor(kpis.connectionsDelivered,6000)} detail="Households installed"/>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:14,marginBottom:24}}>
-            <KpiCard label="Daily Deployment Rate" actual={kpis.avgDailyRate} target={90} unit="/day" rag={ragFor(kpis.avgDailyRate,90)} detail="Avg across active sites"/>
-            <KpiCard label="Time to First Power" actual={kpis.avgTTFP??"—"} target={3} unit=" days" rag={kpis.avgTTFP!=null?ragFor(kpis.avgTTFP,3,false):"Amber"} detail={kpis.avgTTFP?"Avg across projects":"No data yet"}/>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:14,marginBottom:24}}>
             <KpiCard label="Update Compliance" actual={kpis.avgUpdateCompliance} target={100} unit="%" rag={ragFor(kpis.avgUpdateCompliance,100)} detail="Avg across team"/>
             <KpiCard label="Evidence Compliance" actual={kpis.avgEvidenceCompliance} target={100} unit="%" rag={ragFor(kpis.avgEvidenceCompliance,100)} detail="Avg across team"/>
           </div>
@@ -398,7 +393,7 @@ export default function App() {
             <table style={{width:"100%",borderCollapse:"collapse",fontSize:13}}>
               <thead><tr style={{background:"#1a2a4a",color:"#fff"}}>{["METRIC","TARGET","ACTUAL","VARIANCE","RAG","PROGRESS"].map(h=><th key={h} style={{padding:"10px 16px",textAlign:"left",fontSize:10,fontWeight:800,letterSpacing:0.8}}>{h}</th>)}</tr></thead>
               <tbody>
-                {[{metric:"JDAs Signed",target:"3",actual:kpis.jdasSigned,tNum:3,higher:true,unit:""},{metric:"LOI to JDA Conversion",target:"80%",actual:kpis.loiToJda,tNum:80,higher:true,unit:"%"},{metric:"Projects to Submission",target:"70%",actual:kpis.toSubmission,tNum:70,higher:true,unit:"%"},{metric:"Connections Delivered",target:"6,000",actual:kpis.connectionsDelivered,tNum:6000,higher:true,unit:""},{metric:"Daily Deployment Rate",target:"90/day",actual:kpis.avgDailyRate,tNum:90,higher:true,unit:"/day"},{metric:"Time to First Power",target:"3 days",actual:kpis.avgTTFP??"—",tNum:3,higher:false,unit:" days"},{metric:"Update Compliance",target:"100%",actual:kpis.avgUpdateCompliance,tNum:100,higher:true,unit:"%"},{metric:"Evidence Upload Compliance",target:"100%",actual:kpis.avgEvidenceCompliance,tNum:100,higher:true,unit:"%"}].map((row,i)=>{
+                {[{metric:"JDAs Signed",target:"3",actual:kpis.jdasSigned,tNum:3,higher:true,unit:""},{metric:"LOI to JDA Conversion",target:"80%",actual:kpis.loiToJda,tNum:80,higher:true,unit:"%"},{metric:"Projects to Submission",target:"70%",actual:kpis.toSubmission,tNum:70,higher:true,unit:"%"},{metric:"Update Compliance",target:"100%",actual:kpis.avgUpdateCompliance,tNum:100,higher:true,unit:"%"},{metric:"Evidence Upload Compliance",target:"100%",actual:kpis.avgEvidenceCompliance,tNum:100,higher:true,unit:"%"}].map((row,i)=>{
                   const has=row.actual!=="—"&&row.actual!=null;
                   const rag=has?ragFor(row.actual,row.tNum,row.higher):"Amber";
                   const variance=has?(row.higher?row.actual-row.tNum:row.tNum-row.actual):null;

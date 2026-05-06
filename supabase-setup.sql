@@ -20,6 +20,23 @@ create table public.projects (
   "clusterLead" text,
   rag text,
   size numeric,
+  connections integer default 0,
+  "pvCapacity" numeric default 0,
+  loi boolean default false,
+  jda boolean default false,
+  credit boolean default false,
+  fc boolean default false,
+  "startDate" date,
+  "targetCompletion" date,
+  "actualCompletion" date,
+  "subsidyExpected" numeric default 0,
+  "capexPerConn" numeric default 0,
+  duration integer default 0,
+  issue text,
+  "lastUpdate" date,
+  "targetClose" text,
+  "updateCompliance" integer default 100,
+  "evidenceCompliance" integer default 100,
   updated_at timestamptz not null default now()
 );
 
@@ -127,3 +144,30 @@ insert into public.deployment_sites (id, site, project, "householdsInstalled") v
   (1, 'Kwali North', 'Kwali Cluster MeshGrid', 140),
   (2, 'Kwali South', 'Kwali Cluster MeshGrid', 180),
   (3, 'Bwari East', 'Bwari Rural MeshGrid', 80);
+
+-- ─── MIGRATION: run this block on existing databases instead of the full script ─
+-- alter table public.projects add column if not exists connections integer default 0;
+-- alter table public.projects add column if not exists "pvCapacity" numeric default 0;
+-- alter table public.projects add column if not exists loi boolean default false;
+-- alter table public.projects add column if not exists jda boolean default false;
+-- alter table public.projects add column if not exists credit boolean default false;
+-- alter table public.projects add column if not exists fc boolean default false;
+-- alter table public.projects add column if not exists "startDate" date;
+-- alter table public.projects add column if not exists "targetCompletion" date;
+-- alter table public.projects add column if not exists "actualCompletion" date;
+-- alter table public.projects add column if not exists "subsidyExpected" numeric default 0;
+-- alter table public.projects add column if not exists "capexPerConn" numeric default 0;
+-- alter table public.projects add column if not exists duration integer default 0;
+-- alter table public.projects add column if not exists issue text;
+-- alter table public.projects add column if not exists "lastUpdate" date;
+-- alter table public.projects add column if not exists "targetClose" text;
+-- alter table public.projects add column if not exists "updateCompliance" integer default 100;
+-- alter table public.projects add column if not exists "evidenceCompliance" integer default 100;
+-- alter table public.projects drop column if exists "connectionsInstalled";
+-- alter table public.projects drop column if exists "dailyRate";
+-- alter table public.projects drop column if exists arpu;
+-- alter table public.projects drop column if exists "subsidyReceived";
+-- alter table public.projects drop column if exists owner;
+-- alter table public.projects drop column if exists opex;
+-- alter table public.projects drop column if exists "timeToFirstPower";
+-- alter table public.projects rename column "stageStart" to "startDate";
