@@ -293,6 +293,7 @@ function App() {
 
   const [tab, setTab] = useState("pipeline");
   const [viewMode, setViewMode] = useState("list");
+  const [deployViewMode, setDeployViewMode] = useState("list");
   const [filterStage, setFilterStage] = useState("All");
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState("");
@@ -517,38 +518,44 @@ function App() {
 
         {/* ══ DEPLOYMENT TRACKER ══ */}
         {tab === "deployment" && (<>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
             <SectionHeader label="DEPLOYMENT TRACKER"/>
-            <button onClick={()=>{setSForm(blankSite());setSiteModal("add");}} style={{background:"#3b6cb7",color:"#fff",border:"none",borderRadius:8,padding:"8px 18px",cursor:"pointer",fontWeight:700,fontSize:12,marginBottom:14}}>+ Add Site</button>
+            <div style={{display:"flex",gap:8,alignItems:"center"}}>
+              <div style={{display:"flex",background:"#fff",borderRadius:8,overflow:"hidden",border:"1.5px solid #dde"}}>{[["list","☰"],["grid","⊞"]].map(([m,icon])=><button key={m} onClick={()=>setDeployViewMode(m)} style={{background:deployViewMode===m?"#3b6cb7":"transparent",color:deployViewMode===m?"#fff":"#888",border:"none",padding:"7px 13px",cursor:"pointer",fontSize:16}}>{icon}</button>)}</div>
+              <button onClick={()=>{setSForm(blankSite());setSiteModal("add");}} style={{background:"#3b6cb7",color:"#fff",border:"none",borderRadius:8,padding:"8px 18px",cursor:"pointer",fontWeight:700,fontSize:12}}>+ Add Site</button>
+            </div>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:14,marginBottom:22}}>
-            {deployment.map(site=>(
-              <div key={site.id} style={{background:"#fff",borderRadius:10,padding:18,boxShadow:"0 2px 8px rgba(0,0,0,0.07)",borderTop:"3px solid #3b6cb7"}}>
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:2}}><div style={{fontWeight:800,fontSize:13,color:"#1a2a4a"}}>{site.sitename}</div><div><button onClick={()=>{setSForm({...site});setSiteModal(site.id);}} style={EDIT_BTN}>✏️</button><button onClick={()=>setConfirmDelete({type:"site",id:site.id,label:site.sitename})} style={DEL_BTN}>🗑️</button></div></div>
-                <div style={{fontSize:11,color:"#888",marginBottom:10}}>{site.project} · {site.LGA}, {site.state}</div>
-                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>{[["Connections",fmt(site.connections)],["PV (kWp)",site.PV||"—"],["State",site.state||"—"],["LGA",site.LGA||"—"]].map(([k,v])=><div key={k} style={{background:"#f5f7fa",borderRadius:6,padding:"5px 8px"}}><div style={{fontSize:9,color:"#aaa",fontWeight:700}}>{k}</div><div style={{fontSize:12,fontWeight:700,color:"#1a2a4a"}}>{v}</div></div>)}</div>
-              </div>
-            ))}
-          </div>
-          <div style={{background:"#fff",borderRadius:10,overflow:"hidden",boxShadow:"0 2px 8px rgba(0,0,0,0.07)"}}>
-            <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-              <thead><tr style={{background:"#1a2a4a",color:"#fff"}}>{["SITE","PROJECT","STATE","LGA","CONNECTIONS","PV (kWp)",""].map(h=><th key={h} style={{padding:"10px 10px",textAlign:"left",fontSize:9,fontWeight:800,letterSpacing:0.7}}>{h}</th>)}</tr></thead>
-              <tbody>
-                {deployment.map((site,i)=>(
-                  <tr key={site.id} style={{background:i%2===0?"#f7f9fc":"#fff",borderBottom:"1px solid #eef"}}>
-                    <td style={{padding:"9px 10px",fontWeight:700}}>{site.sitename}</td>
-                    <td style={{padding:"9px 10px",color:"#555",fontSize:11}}>{site.project.replace(" MeshGrid","")}</td>
-                    <td style={{padding:"9px 10px",color:"#666"}}>{site.state}</td>
-                    <td style={{padding:"9px 10px",color:"#666"}}>{site.LGA}</td>
-                    <td style={{padding:"9px 10px",fontWeight:700}}>{fmt(site.connections)}</td>
-                    <td style={{padding:"9px 10px"}}>{site.PV||"—"}</td>
-                    <td style={{padding:"9px 10px",whiteSpace:"nowrap"}}><button onClick={()=>{setSForm({...site});setSiteModal(site.id);}} style={EDIT_BTN}>✏️</button><button onClick={()=>setConfirmDelete({type:"site",id:site.id,label:site.sitename})} style={DEL_BTN}>🗑️</button></td>
-                  </tr>
-                ))}
-                <tr style={{background:"#1a2a4a",color:"#fff",fontWeight:800,fontSize:12}}><td colSpan={4} style={{padding:"9px 10px"}}>TOTAL</td><td style={{padding:"9px 10px"}}>{fmt(deployment.reduce((s,d)=>s+d.connections,0))}</td><td style={{padding:"9px 10px"}}>{deployment.reduce((s,d)=>s+(d.PV||0),0)}</td><td/></tr>
-              </tbody>
-            </table>
-          </div>
+          {deployViewMode === "grid" ? (
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:14}}>
+              {deployment.map(site=>(
+                <div key={site.id} style={{background:"#fff",borderRadius:10,padding:18,boxShadow:"0 2px 8px rgba(0,0,0,0.07)",borderTop:"3px solid #3b6cb7"}}>
+                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:2}}><div style={{fontWeight:800,fontSize:13,color:"#1a2a4a"}}>{site.sitename}</div><div><button onClick={()=>{setSForm({...site});setSiteModal(site.id);}} style={EDIT_BTN}>✏️</button><button onClick={()=>setConfirmDelete({type:"site",id:site.id,label:site.sitename})} style={DEL_BTN}>🗑️</button></div></div>
+                  <div style={{fontSize:11,color:"#888",marginBottom:10}}>{site.project} · {site.LGA}, {site.state}</div>
+                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>{[["Connections",fmt(site.connections)],["PV (kWp)",site.PV||"—"],["State",site.state||"—"],["LGA",site.LGA||"—"]].map(([k,v])=><div key={k} style={{background:"#f5f7fa",borderRadius:6,padding:"5px 8px"}}><div style={{fontSize:9,color:"#aaa",fontWeight:700}}>{k}</div><div style={{fontSize:12,fontWeight:700,color:"#1a2a4a"}}>{v}</div></div>)}</div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{background:"#fff",borderRadius:10,overflow:"hidden",boxShadow:"0 2px 8px rgba(0,0,0,0.07)"}}>
+              <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
+                <thead><tr style={{background:"#1a2a4a",color:"#fff"}}>{["SITE","PROJECT","STATE","LGA","CONNECTIONS","PV (kWp)",""].map(h=><th key={h} style={{padding:"10px 10px",textAlign:"left",fontSize:9,fontWeight:800,letterSpacing:0.7}}>{h}</th>)}</tr></thead>
+                <tbody>
+                  {deployment.map((site,i)=>(
+                    <tr key={site.id} style={{background:i%2===0?"#f7f9fc":"#fff",borderBottom:"1px solid #eef"}}>
+                      <td style={{padding:"9px 10px",fontWeight:700}}>{site.sitename}</td>
+                      <td style={{padding:"9px 10px",color:"#555",fontSize:11}}>{site.project.replace(" MeshGrid","")}</td>
+                      <td style={{padding:"9px 10px",color:"#666"}}>{site.state}</td>
+                      <td style={{padding:"9px 10px",color:"#666"}}>{site.LGA}</td>
+                      <td style={{padding:"9px 10px",fontWeight:700}}>{fmt(site.connections)}</td>
+                      <td style={{padding:"9px 10px"}}>{site.PV||"—"}</td>
+                      <td style={{padding:"9px 10px",whiteSpace:"nowrap"}}><button onClick={()=>{setSForm({...site});setSiteModal(site.id);}} style={EDIT_BTN}>✏️</button><button onClick={()=>setConfirmDelete({type:"site",id:site.id,label:site.sitename})} style={DEL_BTN}>🗑️</button></td>
+                    </tr>
+                  ))}
+                  <tr style={{background:"#1a2a4a",color:"#fff",fontWeight:800,fontSize:12}}><td colSpan={4} style={{padding:"9px 10px"}}>TOTAL</td><td style={{padding:"9px 10px"}}>{fmt(deployment.reduce((s,d)=>s+d.connections,0))}</td><td style={{padding:"9px 10px"}}>{deployment.reduce((s,d)=>s+(d.PV||0),0)}</td><td/></tr>
+                </tbody>
+              </table>
+            </div>
+          )}
         </>)}
 
         {/* ══ TEAM PERFORMANCE ══ */}
