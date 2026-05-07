@@ -315,6 +315,7 @@ function App() {
   const [tab, setTab] = useState("pipeline");
   const [viewMode, setViewMode] = useState("list");
   const [deployViewMode, setDeployViewMode] = useState("list");
+  const [deployProjectFilter, setDeployProjectFilter] = useState("All");
   const [teamViewMode, setTeamViewMode] = useState("grid");
   const [filterStage, setFilterStage] = useState("All");
   const [taskFilter, setTaskFilter] = useState("All");
@@ -371,6 +372,7 @@ function App() {
   const creditCount = projects.filter(p => p.credit).length;
   const filteredProjects = filterStage === "All" ? projects : projects.filter(p => p.stage === filterStage);
   const filteredTasks = tasks.filter(t => (taskFilter === "All" || t.status === taskFilter) && (taskProjectFilter === "All" || t.project === taskProjectFilter));
+  const filteredDeployment = deployProjectFilter === "All" ? deployment : deployment.filter(d => d.project === deployProjectFilter);
   const openIssues = issues.filter(i => i.status !== "Resolved").length;
 
   const saveProject = () => { if (!pForm.name.trim()) return alert("Project name is required"); const duration = countWorkingDays(pForm.startDate, pForm.actualCompletion || today()); const projectToSave = { ...pForm, duration }; projectModal === "add" ? setProjects(ps => [...ps, { ...projectToSave, id: Date.now() }]) : setProjects(ps => ps.map(p => p.id === projectModal ? { ...projectToSave } : p)); flash(); setProjectModal(null); };
@@ -550,13 +552,14 @@ function App() {
           <div className="rsp-filter-bar" style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
             <SectionHeader label="DEPLOYMENT TRACKER"/>
             <div style={{display:"flex",gap:8,alignItems:"center"}}>
+              <select value={deployProjectFilter} onChange={e=>setDeployProjectFilter(e.target.value)} style={{...INPUT,width:220,fontSize:12}}><option value="All">All Projects</option>{projects.map(p=><option key={p.id} value={p.name}>{p.name}</option>)}</select>
               <div style={{display:"flex",background:"#fff",borderRadius:8,overflow:"hidden",border:"1.5px solid #dde"}}>{[["list","☰"],["grid","⊞"]].map(([m,icon])=><button key={m} onClick={()=>setDeployViewMode(m)} style={{background:deployViewMode===m?"#3b6cb7":"transparent",color:deployViewMode===m?"#fff":"#888",border:"none",padding:"7px 13px",cursor:"pointer",fontSize:16}}>{icon}</button>)}</div>
               <button onClick={()=>{setSForm(blankSite());setSiteModal("add");}} style={{background:"#3b6cb7",color:"#fff",border:"none",borderRadius:8,padding:"8px 18px",cursor:"pointer",fontWeight:700,fontSize:12}}>+ Add Site</button>
             </div>
           </div>
           {deployViewMode === "grid" ? (
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:14}}>
-              {deployment.map(site=>(
+              {filteredDeployment.map(site=>(
                 <div key={site.id} style={{background:"#fff",borderRadius:10,padding:18,boxShadow:"0 2px 8px rgba(0,0,0,0.07)",borderTop:"3px solid #3b6cb7"}}>
                   <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:2}}><div style={{fontWeight:800,fontSize:13,color:"#1a2a4a"}}>{site.sitename}</div><div><button onClick={()=>{setSForm({...site});setSiteModal(site.id);}} style={EDIT_BTN}>✏️</button><button onClick={()=>setConfirmDelete({type:"site",id:site.id,label:site.sitename})} style={DEL_BTN}>🗑️</button></div></div>
                   <div style={{fontSize:11,color:"#888",marginBottom:10}}>{site.project} · {site.LGA}, {site.state}</div>
@@ -569,7 +572,7 @@ function App() {
               <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
                 <thead><tr style={{background:"#1a2a4a",color:"#fff"}}>{["SITE","PROJECT","STATE","LGA","CONNECTIONS","PV (kWp)",""].map(h=><th key={h} style={{padding:"10px 10px",textAlign:"left",fontSize:9,fontWeight:800,letterSpacing:0.7}}>{h}</th>)}</tr></thead>
                 <tbody>
-                  {deployment.map((site,i)=>(
+                  {filteredDeployment.map((site,i)=>(
                     <tr key={site.id} style={{background:i%2===0?"#f7f9fc":"#fff",borderBottom:"1px solid #eef"}}>
                       <td style={{padding:"9px 10px",fontWeight:700}}>{site.sitename}</td>
                       <td style={{padding:"9px 10px",color:"#555",fontSize:11}}>{site.project.replace(" MeshGrid","")}</td>
@@ -580,7 +583,7 @@ function App() {
                       <td style={{padding:"9px 10px",whiteSpace:"nowrap"}}><button onClick={()=>{setSForm({...site});setSiteModal(site.id);}} style={EDIT_BTN}>✏️</button><button onClick={()=>setConfirmDelete({type:"site",id:site.id,label:site.sitename})} style={DEL_BTN}>🗑️</button></td>
                     </tr>
                   ))}
-                  <tr style={{background:"#1a2a4a",color:"#fff",fontWeight:800,fontSize:12}}><td colSpan={4} style={{padding:"9px 10px"}}>TOTAL</td><td style={{padding:"9px 10px"}}>{fmt(deployment.reduce((s,d)=>s+d.connections,0))}</td><td style={{padding:"9px 10px"}}>{deployment.reduce((s,d)=>s+(d.PV||0),0)}</td><td/></tr>
+                  <tr style={{background:"#1a2a4a",color:"#fff",fontWeight:800,fontSize:12}}><td colSpan={4} style={{padding:"9px 10px"}}>TOTAL</td><td style={{padding:"9px 10px"}}>{fmt(filteredDeployment.reduce((s,d)=>s+d.connections,0))}</td><td style={{padding:"9px 10px"}}>{filteredDeployment.reduce((s,d)=>s+(d.PV||0),0)}</td><td/></tr>
                 </tbody>
               </table>
             </div>
